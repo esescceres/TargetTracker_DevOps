@@ -1,0 +1,24 @@
+name: Embedded DevOps CI Pipeline
+
+# Bu pipeline sadece "main" dalına yeni bir kod yüklendiğinde çalışır
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    # Testlerimizi GitHub'ın bize sağladığı ücretsiz bir Linux sunucusunda çalıştıracağız
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Adım: GitHub'daki kodumuzu Linux sunucusuna indirir
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Adım: Senin az önce Mac'te yaptığın derleme işlemini Linux sunucusu kendi kendine yapar
+    - name: Compile the Test Code
+      run: g++ test.cpp -o run_tests
+
+    # 3. Adım: Derlenen test programını çalıştırır
+    - name: Execute Automated Tests
+      run: ./run_tests
